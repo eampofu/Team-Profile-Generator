@@ -14,7 +14,7 @@ const render = require("./src/page-template.js");
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
 
 const team=[];
-
+//prompt for the Manager
 const addManager = () => {
     return inquirer.prompt ([
         {
@@ -51,11 +51,94 @@ const addManager = () => {
     })
 };
 
+//prompt for the other members
+async function  addTeamMember()  {
+   
+    const askRole = await  inquirer.prompt([
+        {
+            type: 'list',
+            name: 'role',
+            message: "Please choose your employee's role",
+            choices: ['Engineer', 'Intern']
+        }
+    ]);
+        return inquirer.prompt ([
+            
+            {
+                type: 'input',
+                name: 'name',
+                message: `What is the name of the ${askRole.role}?`, 
+               
+            },
+            {
+                type: 'input',
+                name: 'id',
+                message: `Please enter the ${askRole.role}'s ID.`
+                
+                    
+                
+            },
+            {
+                type: 'input',
+                name: 'email',
+                message: `Please enter the ${askRole.role}'s email.`
+               
+            },
+            {
+                type: 'input',
+                name: 'github',
+                message: `Please enter the ${askRole.role}'s github username.`,
+                when: () => askRole.role === "Engineer"
+               
+            },
+            {
+                type: 'input',
+                name: 'school',
+                message: `Please enter the ${askRole.role}'s school`,
+                when: () => askRole.role === "Intern"
+              
+            },
+            {
+                type: 'confirm',
+                name: 'confirmAddNew',
+                message: 'Would you like to add more team members?',
+                default: false
+            }
+        ])
+        .then(data => {
+            // data for employee types 
+    
+            let { name, id, email,  github, school, confirmAddNew } = data; 
+            let employee; 
+    console.log(askRole.role)
+            if (askRole.role === "Engineer") {
+                employee = new Engineer (name, id, email, github);
+    
+                console.log(employee);
+    
+            } else if (askRole.role === "Intern") {
+                employee = new Intern (name, id, email, school);
+    
+                console.log(employee);
+            }
+    
+            team.push(employee); 
+    
+            if (confirmAddNew) {
+                return addTeamMember(team); 
+            } else {
+                return team;
+            }
+        })
+    
+    };
 
 function init()
 {
     console.log("Please Build your Team.")
-    addManager();
+    addManager().then(
+        addTeamMember
+    );
   
    
 }
