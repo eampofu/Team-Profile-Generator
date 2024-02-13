@@ -43,7 +43,7 @@ const addManager = () => {
 			const manager = new Manager(name, id, email, officeNumber);
 
 			team.push(manager);
-			// console.log(manager);
+		
 		});
 };
 
@@ -101,17 +101,12 @@ async function addTeamMember() {
 			console.log(askRole.role);
 			if (askRole.role === "Engineer") {
 				employee = new Engineer(name, id, email, github);
-
-				// console.log(employee);
 			} else if (askRole.role === "Intern") {
 				employee = new Intern(name, id, email, school);
-
-				console.log(employee);
 			}
 
 			team.push(employee);
-			console.log(team);
-			console.log(outputPath);
+
 			if (confirmAddNew) {
 				return addTeamMember(team);
 			} else {
@@ -120,16 +115,18 @@ async function addTeamMember() {
 		});
 }
 writeFile = (data) => {
-    if (!fs.existsSync(OUTPUT_DIR)){
-        fs.mkdirSync(OUTPUT_DIR);
-    }
+	if (!fs.existsSync(OUTPUT_DIR)) {
+		fs.mkdirSync(OUTPUT_DIR);
+	}
 
 	fs.writeFile(outputPath, data, (err) => {
 		if (err) {
 			console.log(err);
 			return;
 		} else {
-			console.log("Profile created");
+			console.log(
+				"Profile created check the output folder for the team.html file"
+			);
 		}
 	});
 };
